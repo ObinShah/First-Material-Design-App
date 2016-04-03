@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WOTD</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link rel='stylesheet' href='assets/Roboto_400,500,700,400italic.css'>
+    <link rel="stylesheet" href="assets/angular-material.css" />
+    <link rel="stylesheet" href="assets/app.css" />
+
+    <style type="text/css">
+        /* Hide when Angular is not yet loaded and initialized */
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+
+        body {
+            /*background: #009688;*/
+            /*background-color: #3e4f56;*/
+            /*background-color: #1081AF;            <----- Previous blue color, find, replace and revert to this*/
+            background-color: #10539A;
+        }
+
+        .wrapper {
+            height: 100%;
+            -webkit-transition: all 300ms ease-in-out;
+            transition: all 300ms ease-in-out;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .material-design-hamburger button {
+            display: block;
+            border: none;
+            background: none;
+            outline: 0;
+        }
+
+        .material-design-hamburger__icon {
+            padding: 2rem 1rem;
+            cursor: pointer;
+        }
+
+        .material-design-hamburger__layer {
+            display: block;
+            width: 30px;
+            height: 4px;
+            background: #eee;
+            position: relative;
+            -webkit-animation-duration: 300ms;
+            animation-duration: 300ms;
+            -webkit-animation-timing-function: ease-in-out;
+            animation-timing-function: ease-in-out;
+        }
+
+            .material-design-hamburger__layer:before, .material-design-hamburger__layer:after {
+                display: block;
+                width: inherit;
+                height: 4px;
+                position: absolute;
+                background: inherit;
+                left: 0;
+                content: '';
+                -webkit-animation-duration: 300ms;
+                animation-duration: 300ms;
+                -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
+            }
+
+            .material-design-hamburger__layer:before {
+                bottom: 200%;
+            }
+
+            .material-design-hamburger__layer:after {
+                top: 200%;
+            }
+
+        .toolbarMenu {
+            font-size: 1em;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+            .toolbarMenu div {
+                margin: 0.5em;
+                padding-bottom: 0.5em;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .toolbarMenu a {
+                text-decoration: none;
+                color: #3367d6;
+            }
+
+                .toolbarMenu a:hover {
+                    text-decoration: underline;
+                }
+
+            .toolbarMenu div:last-child {
+                border: 0;
+            }
+
+        .transition {
+            transition: .3s cubic-bezier(.3, 0, 0, 1.3);
+        }
+
+        .card {
+            background-color: #fff;
+            bottom: 0;
+            box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+            height: 300px;
+            left: 0;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            right: 0;
+            top: 0;
+            width: 800px;
+        }
+
+            .card:hover {
+                height: 450px;
+                width: 800px;
+            }
+
+                .card:hover .cta-container {
+                    display: inline;
+                    margin-top: 380px;
+                }
+
+                .card:hover .card_circle {
+                    margin-top: -130px;
+                }
+
+                .card:hover h2 {
+                    background: #3487f7;
+                    color: #fff;
+                    margin-top: 570px;
+                    padding: 5px;
+                }
+
+                    .card:hover h2 small {
+                        color: #fff;
+                    }
+
+                .card:hover p {
+                    margin-top: 300px;
+                }
+
+        .card_circle {
+            background: url('assets/imgs/washedout.png') no-repeat center bottom;
+            background-color: #3487f7;
+            background-size: cover;
+            height: 400px;
+            margin-top: -270px;
+            position: absolute;
+            width: 800px;
+        }
+
+        h2 {
+            color: #3487f7;
+            font-family: 'Raleway', sans-serif;
+            font-size: 24px;
+            font-weight: 200;
+            margin-top: 10px;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            z-index: 9;
+        }
+
+        p {
+            color: rgba(0, 0, 0, .6);
+            font-family: 'Raleway', sans-serif;
+            font-size: 100%;
+            font-weight: normal;
+            margin-top: 200px;
+            position: absolute;
+            text-align: center;
+            z-index: 9;
+        }
+
+        .cta-container {
+            display: none;
+            margin-top: 320px;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            z-index: 9;
+        }
+
+        .cta {
+            -moz-border-radius: 2px;
+            -moz-transition: 0.2s ease-out;
+            -ms-transition: 0.2s ease-out;
+            -o-transition: 0.2s ease-out;
+            -webkit-border-radius: 2px;
+            -webkit-transition: 0.2s ease-out;
+            background-clip: padding-box;
+            border: 2px solid #3487f7;
+            border-radius: 2px;
+            color: #3487f7;
+            display: inline-block;
+            font-family: 'Raleway', sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+            height: 36px;
+            letter-spacing: 0.5px;
+            line-height: 36px;
+            margin-bottom: 15px;
+            padding: 0 2rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.2s ease-out;
+        }
+
+            .cta:hover {
+                background-color: #3487f7;
+                box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                color: #fff;
+                -moz-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+
+
+        .card_wotd {
+            background-color: #fff;
+            bottom: 0;
+            box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+            height: 150px;
+            left: 0;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            right: 0;
+            top: 0;
+            width: 800px;
+        }
+
+            .card_wotd:hover {
+                height: 220px;
+                width: 800px;
+            }
+
+                .card_wotd:hover .cta-container {
+                    display: inline;
+                    margin-top: 180px;
+                }
+
+
+        .card_wotd:hover h2 {
+            background: #3487f7;
+            color: #fff;
+            margin-top: 570px;
+            padding: 5px;
+            
+        }
+
+        .card_wotd:hover h2 small {
+            color: #fff;
+        }
+
+        .card_wotd:hover p {
+            margin-top: 300px;
+        }
+
+        
+    </style>
+
+</head>
+
+<body ng-app="App" ng-controller="PageController as pc" ng-cloak>
+    <!-- Toolbar -->
+    <div layout="column" layout-align="none">
+        <md-toolbar style="background-color: #10539A">
+            <div class="md-toolbar-tools">
+                <section class="wrapper">
+                    <section class="material-design-hamburger">
+                        <button class="material-design-hamburger__icon" ng-click="pc.toggleLeft()">
+                            <span class="material-design-hamburger__layer"></span>
+                        </button>
+                    </section>
+                </section>
+
+                <h3>
+                    <span>Word of the day</span>
+                </h3>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="Search">
+                    <md-icon md-svg-icon="assets/svg/search_white.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Get App">
+                    <md-icon md-svg-icon="assets/svg/get_app_white.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Share">
+                    <md-icon md-svg-icon="assets/svg/share_white.svg" style="height:30px; width: 30px;"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Leaderboard">
+                    <md-icon md-svg-icon="assets/svg/list_white.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="User">
+                    <md-icon md-svg-icon="assets/svg/account_circle_white.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Help">
+                    <md-icon md-svg-icon="assets/svg/help_white.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div layout="row" layout-align="none">
+        <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+            <md-content ng-controller="LeftController as lc">
+                <md-toolbar class="md-theme-light" style="background-color: #10539A">
+                    <div layout="row" layout-align="start center">
+                        <md-button class="md-icon-button" aria-label="Back" ng-click="lc.close()">
+                            <md-icon md-svg-icon="assets/svg/arrow_back_white.svg" style="height:32px; width: 32px;"></md-icon>
+                        </md-button>
+                        <div>
+                            <md-button class="md-icon-button" aria-label="More">
+                                <md-icon md-svg-icon="assets/svg/account_circle_white.svg" style="height:32px; width: 32px;"></md-icon>
+                            </md-button>
+                            <a href="#" target="_blank" style="color:white; text-decoration:none;">Login/My Account</a>
+                        </div>
+                    </div>
+                </md-toolbar>
+                <md-content layout="column" layout-align="none" class="toolbarMenu">
+                    <div>
+                        <md-button class="md-icon-button" aria-label="More">
+                            <md-icon md-svg-icon="assets/svg/account_circle_black.svg" style="height:32px; width: 32px;"></md-icon>
+                        </md-button>
+                        <a href="#" target="_blank">Login/My Account</a>
+                    </div>
+                    <div>
+                        <md-button class="md-icon-button" aria-label="Leaderboard">
+                            <md-icon md-svg-icon="assets/svg/list_black.svg" style="height:32px; width: 32px;"></md-icon>
+                        </md-button>
+                        <a href="#" target="_blank">Leaderboard</a>
+                    </div>
+                    <div>
+                        <md-button class="md-icon-button" aria-label="Starred Posts">
+                            <md-icon md-svg-icon="assets/svg/stars_black.svg" style="height:32px; width: 32px;"></md-icon>
+                        </md-button>
+                        <a href="#" target="_blank">My Starred Posts</a>
+                    </div>
+                    <div>
+                        <md-button class="md-icon-button" aria-label="Get App">
+                            <md-icon md-svg-icon="assets/svg/get_app_black.svg" style="height:32px; width: 32px;"></md-icon>
+                        </md-button>
+                        <a href="#" target="_blank">Get the App</a>
+                    </div>
+                    <div>
+                        <md-button class="md-icon-button" aria-label="Share">
+                            <md-icon md-svg-icon="assets/svg/share_black.svg" style="height:30px; width: 30px;"></md-icon>
+                        </md-button>
+                        <a href="#" target="_blank">Share</a>
+                    </div>
+                    <div>
+                        <md-button class="md-icon-button" aria-label="Help">
+                            <md-icon md-svg-icon="assets/svg/help_black.svg" style="height:32px; width: 32px;"></md-icon>
+                        </md-button>
+                        <a href="#" target="_blank">Help</a>
+                    </div>
+                </md-content>
+            </md-content>
+        </md-sidenav>
+    </div>
+
+    <!-- Cards -->
+
+    <div layout="column" layout-align="space-around none">
+        <div class="card_wotd transition">
+            <h1 class="transition" style="text-align: center; color: #3487f7;">Ululation</h1>
+            
+            
+            <div class="cta-container transition">
+                <a href="http://www.dictionary.com/browse/ululation">Ululation on Dictionary.com</a>
+                <md-button class="md-icon-button" aria-label="More">
+                    <md-icon md-svg-icon="assets/svg/playlist_play_black.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="More">
+                    <md-icon md-svg-icon="assets/svg/playlist_play_white.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button>Save</md-button>
+                <md-button>View</md-button>
+                <a href="#" class="cta">Call to action</a>
+            </div>
+        </div>
+
+        <br/>
+
+        <div class="card transition">
+            <p>Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.
+                Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.
+                Aenean lacinia bibendum nulla sed consectetur. Donec ullamcorper nulla non metus auctor fringilla.
+            </p>
+            <div class="cta-container transition">
+                <md-button class="md-icon-button" aria-label="More">
+                    <md-icon md-svg-icon="assets/svg/playlist_play_black.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="More">
+                    <md-icon md-svg-icon="assets/svg/playlist_play_white.svg" style="height:32px; width: 32px;"></md-icon>
+                </md-button>
+                <md-button>Save</md-button>
+                <md-button>View</md-button>
+                <a href="#" class="cta">Call to action</a>
+            </div>
+            <div class="card_circle transition"></div>
+        </div>
+
+    </div>
+
+
+
+    <!-- Icons Present -->
+    <div>
+        &nbsp;&nbsp;<b style="color:white">Icon Listing -</b>
+        <br />
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/add_circle_outline_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/add_circle_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/add_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/block_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/clear_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/content_copy_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/create_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/crop_original_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/dd_box_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/favorite_border_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/favorite_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/feedback_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/flag_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/format_list_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/get_app_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/help_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/image_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/info_outline_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/info_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/linked_camera_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/list_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/menu_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/new_releases_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/people_outline_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/people_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/person_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/photo_library_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/photo_size_select_actual_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/photo_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/poll_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/report_problem_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/report_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/search_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/share.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/share_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/star_border_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/star_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/stars_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/thumb_down_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/thumb_up_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/turned_in_not_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/verified_user_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+
+
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/arrow_back_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/first_page_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/keyboard_arrow_left_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/last_page_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/local_play_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/more_horiz_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/more_vert_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/playlist_play_black.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+        <md-button class="md-icon-button" aria-label="More"> <md-icon md-svg-icon="assets/svg/playlist_play_white.svg" style="height:32px; width: 32px;"></md-icon> </md-button>
+    </div>
+
+    <script src="scripts/angular.js"></script>
+    <script src="scripts/angular-animate.js"></script>
+    <script src="scripts/angular-aria.js"></script>
+    <script type="text/javascript" src="scripts/angular-material.js"></script>
+
+    <script src="./apps/app.js"></script>
+    <script src="./apps/Users.js"></script>
+    <script src="./controllers/PageController.js"></script>
+    <script src="./controllers/UserController.js"></script>
+    <script src="./services/UserService.js"></script>
+
+</body>
+
+</html>
